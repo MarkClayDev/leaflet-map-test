@@ -4,28 +4,22 @@
     <title>Leaflet Map</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Include Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <style>
         #map { height: 100vh; } /* Style to make map div full screen */
     </style>
 </head>
 <body>
-    <!-- Map container -->
     <div id="map"></div>
     
-    <!-- Include Leaflet JavaScript -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        // Initialize Leaflet map centered at [0, 0] with zoom level 2
         var map = L.map('map').setView([0, 0], 2);
         
-        // Add OpenStreetMap tiles as the base layer
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
         }).addTo(map);
         
-        // Function to handle successful geolocation
         function onLocationFound(e) {
             var radius = e.accuracy / 2;
             L.marker(e.latlng).addTo(map)
@@ -33,19 +27,29 @@
             L.circle(e.latlng, radius).addTo(map);
         }
         
-        // Function to handle geolocation errors
-        function onLocationError(e) {
-            alert("Geolocation error: " + e.message + "\nPlease enable location services in your browser settings.");
-            // Fallback to default location or prompt user for input
-            map.setView([0, 0], 2); // Default view at center of the world
+        if(!navigator.geolocation){
+            console.log("Your browerser doesnt support geolocation feature!")
         }
+        else{
+            navigator.geolocation.getCurrentPosition(getPosition)
+        }
+
+        function getPosition(position){
+            console.log(position)
+        }
+
+
+        function onLocationError(e) { 
+            alert("Geolocation error: " + e.message + "\nPlease enable location services in your browser settings.");
+           map.setView([0, 0], 2);
+       }
         
         // Listen for location found and error events
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
         
         // Attempt to locate the user's position with options to set view and max zoom
-        map.locate({setView: true, maxZoom: 55});
+        map.locate({setView: true, maxZoom: 55, watch: true, enableHighAccuracy: true});
     </script>
 </body>
 </html>
