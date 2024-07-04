@@ -14,7 +14,7 @@
     
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        var map = L.map('map').setView([0, 0], 2);
+        var map = L.map('map').setView([0, 0], 19); // Set initial zoom level to 19
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             maxZoom: 19,
@@ -32,10 +32,10 @@
 
             // Add a light red marker for the trail
             L.circleMarker(e.latlng, {
-                radius: 5,
+                radius: 0,
                 color: '#ff6666',
                 fillColor: '#ff9999',
-                fillOpacity: 0.5
+                fillOpacity: 0.3
             }).addTo(map);
         }
 
@@ -49,7 +49,7 @@
         map.on('locationerror', onLocationError);
 
         // Attempt to locate the user's position with options to set view and max zoom
-        map.locate({setView: true, maxZoom: 16, watch: true, enableHighAccuracy: true});
+        map.locate({setView: true, maxZoom: 19, watch: true, enableHighAccuracy: true});
     </script>
 </body>
 </html>
