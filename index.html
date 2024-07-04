@@ -20,36 +20,39 @@
             maxZoom: 19,
         }).addTo(map);
         
+        var currentMarker = null;
+        var currentCircle = null;
+
         function onLocationFound(e) {
             var radius = e.accuracy / 2;
-            L.marker(e.latlng).addTo(map)
-                .bindPopup("You are within " + radius + " meters from this point").openPopup();
-            L.circle(e.latlng, radius).addTo(map);
-        }
-        
-        if(!navigator.geolocation){
-            console.log("Your browerser doesnt support geolocation feature!")
-        }
-        else{
-            navigator.geolocation.getCurrentPosition(getPosition)
+
+            if (currentMarker) {
+                currentMarker.setLatLng(e.latlng);
+                currentMarker.setPopupContent("You are within " + radius + " meters from this point").openPopup();
+            } else {
+                currentMarker = L.marker(e.latlng).addTo(map)
+                    .bindPopup("You are within " + radius + " meters from this point").openPopup();
+            }
+
+            if (currentCircle) {
+                currentCircle.setLatLng(e.latlng);
+                currentCircle.setRadius(radius);
+            } else {
+                currentCircle = L.circle(e.latlng, radius).addTo(map);
+            }
         }
 
-        function getPosition(position){
-            console.log(position)
-        }
-
-
-        function onLocationError(e) { 
+        function onLocationError(e) {
             alert("Geolocation error: " + e.message + "\nPlease enable location services in your browser settings.");
-           map.setView([0, 0], 2);
-       }
-        
+            map.setView([0, 0], 2);
+        }
+
         // Listen for location found and error events
         map.on('locationfound', onLocationFound);
         map.on('locationerror', onLocationError);
-        
+
         // Attempt to locate the user's position with options to set view and max zoom
-        map.locate({setView: true, maxZoom: 55, watch: true, enableHighAccuracy: true});
+        map.locate({setView: true, maxZoom: 16, watch: true, enableHighAccuracy: true});
     </script>
 </body>
 </html>
