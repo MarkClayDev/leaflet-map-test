@@ -21,25 +21,22 @@
         }).addTo(map);
         
         var currentMarker = null;
-        var currentCircle = null;
 
         function onLocationFound(e) {
-            var radius = e.accuracy / 2;
-
+            // Update or create the main marker for the current location
             if (currentMarker) {
-                currentMarker.setLatLng(e.latlng);
-                currentMarker.setPopupContent("You are within " + radius + " meters from this point").openPopup();
+                currentMarker.setLatLng(e.latlng).setPopupContent("You are here").openPopup();
             } else {
-                currentMarker = L.marker(e.latlng).addTo(map)
-                    .bindPopup("You are within " + radius + " meters from this point").openPopup();
+                currentMarker = L.marker(e.latlng).addTo(map).bindPopup("You are here").openPopup();
             }
 
-            if (currentCircle) {
-                currentCircle.setLatLng(e.latlng);
-                currentCircle.setRadius(radius);
-            } else {
-                currentCircle = L.circle(e.latlng, radius).addTo(map);
-            }
+            // Add a light red marker for the trail
+            L.circleMarker(e.latlng, {
+                radius: 5,
+                color: '#ff6666',
+                fillColor: '#ff9999',
+                fillOpacity: 0.5
+            }).addTo(map);
         }
 
         function onLocationError(e) {
